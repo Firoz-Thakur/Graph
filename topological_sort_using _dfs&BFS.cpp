@@ -62,3 +62,47 @@ int main() {
     g.dfs(0);
 	return 0;
 }
+
+topological sort using BFS:
+
+void toposort(int src)
+ {
+     int *indeg=new int[V]; 
+
+     for(int i=0;i<V;i++)
+     {
+         indeg[i]=0;
+     }
+     for(int i=0;i<V;i++)
+     {
+          for(auto p:l[i])
+          {
+              indeg[p]++;
+          }
+     }
+
+    queue<int> q;
+
+    for(int i=0;i<V;i++)
+    {
+        if(indeg[i]==0)
+        {
+            q.push(i);
+        }
+    }    
+ while(!q.empty())
+ {
+     int n=q.front();
+     cout<<n<<" ";
+     q.pop();
+     for(auto nbr : l[n])
+     {
+         indeg[nbr]--;
+         if(indeg[nbr]==0)
+         {
+             q.push(nbr);
+         }
+     }
+ } 
+
+ }
