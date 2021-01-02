@@ -1,108 +1,95 @@
-#include <iostream>
-#include <bits/stdc++.h>
-using namespace std;
+
+https://practice.geeksforgeeks.org/problems/topological-sort/1#
 
 
-class graph
+vector<int> ordering;
+ //vector<int> v;
+ map<int,bool> vist;
+    
+void dfs(int src,vector<int> adj[])
 {
- public:
-    map<int,list<int>> mp;
-    
-   void addedg(int x,int y)
-   {
-   	 mp[x].push_back(y);
-   	// mp[y].push_back(x);
-   }
    
- void dfs_help(int src,map<int,bool> &vist, list<int> &order)
- {
-  //  cout<<src<<" ";
-    vist[src]=true;
-    
-    for(auto nbr:mp[src])
-    {
-        if(!vist[nbr])
-        {
-            dfs_help(nbr,vist,order);
-        }
-    }
-    order.push_front(src);
-    return ;    
- }
-
-   void dfs(int src)
+   vist[src]=true;
+   for(int nbr : adj[src])
    {
-     list<int> order;
-     map<int,bool> vist;
-     for(auto p:mp)
-     {
-         auto node=p.first;
-         vist[node]=false;
-     }
-    dfs_help(src,vist,order);
-  for(auto node: order)
-  {
-      cout<<node<<" ";
-  }
+       if(!vist[nbr])
+       {
+           dfs(nbr,adj);
+       }
    }
-};
-
-
-int main() {
-	// your code goes here
-	
-	graph g;
-	g.addedg(0,1);
-	g.addedg(1,2);
-    g.addedg(2,3);
-    g.addedg(3,4);
-    g.addedg(5,4);
-  //  g.addedg(3,0);
-
-    g.dfs(0);
-	return 0;
+      
+  ordering.push_back(src);    
+  
 }
 
-topological sort using BFS:
-
-void toposort(int src)
- {
-     int *indeg=new int[V]; 
-
-     for(int i=0;i<V;i++)
-     {
-         indeg[i]=0;
-     }
-     for(int i=0;i<V;i++)
-     {
-          for(auto p:l[i])
-          {
-              indeg[p]++;
-          }
-     }
-
-    queue<int> q;
-
+vector<int> topoSort(int V, vector<int> adj[]) {
+    // Your code here
+    
+   
+    
     for(int i=0;i<V;i++)
     {
-        if(indeg[i]==0)
-        {
-            q.push(i);
-        }
-    }    
- while(!q.empty())
- {
-     int n=q.front();
-     cout<<n<<" ";
-     q.pop();
-     for(auto nbr : l[n])
-     {
-         indeg[nbr]--;
-         if(indeg[nbr]==0)
-         {
-             q.push(nbr);
-         }
-     }
- } 
+        vist[i]=false;
+    }
+    
+for(int i=0;i<V;i++)
+{
+  if(!vist[i])
+    dfs(i,adj);
+ 
+}  
+  reverse(ordering.begin(),ordering.end()); // we can also use the liest and can performe the list.push_front operation.
+    return ordering;
+    
+ 
+}
 
- }
+Bfs :
+
+
+vector<int> topoSort(int V, vector<int> adj[]) {
+    // Your code here
+    
+    vector<int> v;
+    queue<int> q;
+ 
+    int *indegree=new int[V]; 
+   for(int i=0;i<V;i++)
+   {
+       indegree[i]=0;
+       
+   }
+   for(int i=0;i<V;i++)
+   {
+       for(auto  z : adj[i])
+       {
+           indegree[z]++;
+       }
+   }
+   for(int i=0;i<V;i++)
+   {
+       if(indegree[i]==0)
+       {
+           q.push(i);
+       }
+   }
+   while(!q.empty())
+   {
+       int x=q.front();
+       q.pop();
+       v.push_back(x);
+       
+       for(int nbr : adj[x])
+       {
+           indegree[nbr]--;
+           if(indegree[nbr]==0)
+            q.push(nbr);
+       }
+   }
+  
+    
+    return v;
+}
+
+
+
