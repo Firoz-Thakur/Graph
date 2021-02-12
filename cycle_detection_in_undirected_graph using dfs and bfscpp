@@ -70,3 +70,55 @@ bool isCyclic(vector<int> g[], int V)
    
    return 0;
 }
+
+
+// using dfs
+
+class Solution {
+public:
+ 
+  bool dfs(int src,int par,unordered_map<int,bool> &mp,vector<int> g[])
+  {
+     mp[src]=true;
+     
+     for(auto nbr:g[src])
+     {
+         if(mp[nbr]==false)
+         {
+            bool x=dfs(nbr,src,mp,g);
+            if(x==true)
+             return true;
+         }
+         else if(nbr!=par)
+         {
+             return true;
+         }
+     }
+     return false;
+        
+  }
+ 
+  bool isCycle(int V, vector<int> g[]){
+	    // Code here
+//cycle can be detected using bfs and connected componet logic
+ 
+ 
+     unordered_map<int,bool> visit;
+     for(int i=0;i<V;i++)
+     {
+         visit[i]=false;
+     }
+    
+     for(int i=0;i<V;i++)
+     {
+         if(visit[i]==false)
+         {
+             bool x=dfs(i,i,visit,g);
+             if(x==true)
+              return true;
+         }
+     }
+     
+     return false;
+	}
+};
