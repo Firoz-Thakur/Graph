@@ -138,3 +138,85 @@ int main()
     return 0; 
 } 
 
+
+
+
+
+// method 2;
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+
+vector<vector<int>> v;
+int parent[1000001];
+int rank1[1000001];
+
+int find(int x)
+{
+  if(parent[x]==-1)
+    return x; 
+
+ parent[x]=find(parent[x]);
+  return parent[x];
+
+}
+
+void unite(int x,int y)
+{
+  int s1=find(x);
+  int s2=find(y);
+  if(s1!=s2)
+  {
+    if(rank1[s1]>rank1[s2])
+    {
+      parent[s2]=s1;
+      rank1[s1]+=rank1[s2];
+    }
+    else
+    {
+      parent[s1]=s2;
+      rank1[s2]+=rank1[s1];
+    }
+  }
+}
+
+int main()
+{
+ int n,m;
+ cin>>n>>m;
+ for(int i=0;i<m;i++)
+ {
+   int w,x,y;
+   cin>>x>>y>>w;
+   v.push_back({w,x,y});
+ }
+for(int i=1;i<=n;i++)
+ {
+  rank1[i]=1;
+  parent[i]=-1;
+ }
+
+
+ sort(v.begin(),v.end());
+ int sum=0;
+ for(auto ve:v)
+ {
+    int w=ve[0];
+    int x=ve[1];
+    int y=ve[2];
+    if(find(x)!=find(y))
+    {
+      sum+=w;
+      unite(x,y);
+     // cout<<w<<endl;
+    }
+ }
+// for(int i=1;i<=n;i++)
+//  cout<<parent[i]<<" ";
+
+
+ cout<<sum;
+}
