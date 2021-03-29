@@ -1,0 +1,74 @@
+https://cses.fi/problemset/result/1905650/
+
+Problem similiar to the 2-color porblem
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+long long int n,m;
+map<int,int> visit;
+long long int  dist[1000001];
+map<long long int ,list<long long int> > graph;
+
+bool dfs(int group,long long int src)
+{
+  visit[src]=1;
+  dist[src]=group;
+  for(auto x: graph[src])
+  {
+    if(!visit[x]){
+       bool fl= dfs(!group,x);
+       if(fl==false)
+         return false;
+    }
+    else if(group==dist[x])
+        return false;
+  }
+  return true;
+  }
+
+
+int main()
+{
+   #ifndef ONLINE_JUDGE
+    // for getting input from input.txt
+    freopen("input.txt", "r", stdin);
+    // for writing output to output.txt
+    freopen("outp.txt", "w", stdout);
+   #endif
+
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+cin>>n>>m;
+
+
+while(m--)
+{
+   long long int x,y;
+   cin>>x>>y;
+   graph[x].push_back(y);
+   graph[y].push_back(x);
+}
+
+visit.clear();
+bool fl;
+for(long long int i=1;i<=n;i++)
+{
+    if(!visit[i])
+    {
+     fl=dfs(0,i);
+        if(fl==false)
+             break;
+    }
+}
+if(fl==false)
+ cout<<"IMPOSSIBLE"<<endl;
+else
+{
+    for(long long int i=1;i<=n;i++)
+    cout<<dist[i]+1<<" "; 
+}
+
+}
+
